@@ -1,0 +1,44 @@
+name: Package and publish
+
+on:
+  push:
+    tags:
+      - 'v*'   # triggers on version tags like v1.0.0
+
+jobs:
+  publish-nuget:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v5
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Extract version from tag
+        id: get_version
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build -c Release --no-restore
+
+      - name: Pack
+        run: dotnet pack Diwen.Xbrl/Diwen.Xbrl.csproj -c Release -o ./artifacts /p:PackageVersion=${{ steps.get_version.outputs.version }}
+
+      - name: Push to GitHub Packages
+        run: |
+          dotnet nuget add source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+            --name github \
+            --username ${{ github.repository_owner }} \
+            --password ${{ secrets.XBRL_XOXO_UPDATE }} \
+            --store-password-in-clear-text
+
+          dotnet nuget push ./artifacts/*.nupkg --source github --api-key ${{ secrets.XBRL_XOXO_UPDATE }}

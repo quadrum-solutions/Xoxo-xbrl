@@ -136,7 +136,7 @@ namespace Diwen.Xbrl.Csv
             {
                 DocumentInfo = new DocumentInfo
                 {
-                    DocumentType = "http://xbrl.org/PWD/2020-12-09/report-package"
+                    DocumentType = "https://xbrl.org/report-package/2023"
                 }
             };
 

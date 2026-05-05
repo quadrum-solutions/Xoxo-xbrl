@@ -41,7 +41,7 @@ namespace Diwen.Xbrl.Csv
     public class PlainCsvReport
     {
         /// <summary/>
-        public string DocumentType { get; set; } = "https://xbrl.org/CR/2021-02-03/xbrl-csv";
+        public string DocumentType { get; set; } = "https://xbrl.org/2021/xbrl-csv";
 
         /// <summary/>
         public string Entrypoint { get; set; }

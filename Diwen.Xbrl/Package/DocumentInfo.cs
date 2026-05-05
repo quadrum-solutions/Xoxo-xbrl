@@ -29,10 +29,12 @@ namespace Diwen.Xbrl.Package
     public class DocumentInfo
     {
         /// <summary/>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("extends")]
         public List<string> Extends { get; set; }
 
         /// <summary/>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("final")]
         public Dictionary<string, bool> Final { get; set; }
 
